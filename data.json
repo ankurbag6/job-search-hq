@@ -1,0 +1,42 @@
+{
+    "checklist": [
+      {"id": "c1", "text": "Finalize resume — quantify all bullets", "done": false},
+      {"id": "c2", "text": "Update LinkedIn headline + About section", "done": false},
+      {"id": "c3", "text": "Set LinkedIn Open to Work (hidden from current employer)", "done": false},
+      {"id": "c4", "text": "Prepare 3 STAR behavioral stories (cross-team impact)", "done": false},
+      {"id": "c5", "text": "Practice live system design: AI-powered support platform", "done": false},
+      {"id": "c6", "text": "Write cover letter template (customizable)", "done": false},
+      {"id": "c7", "text": "Prep negotiation anchor numbers (base + equity + bonus)", "done": false},
+      {"id": "c8", "text": "Reach out to 5 LinkedIn contacts this week", "done": false}
+    ],
+    "pipeline": [],
+    "projects": [
+      {"id": "p1", "name": "Job Search HQ", "status": "In Progress", "desc": "AI-assisted job search workflow with Claude"}
+    ],
+    "prep": {
+      "behavioral": [
+        {"id": "b1", "text": "Led initiative that changed org direction — Intuit Assist story", "done": false},
+        {"id": "b2", "text": "Navigated conflict with cross-functional stakeholder", "done": false},
+        {"id": "b3", "text": "Mentored engineer to promotion / ownership", "done": false},
+        {"id": "b4", "text": "Delivered under ambiguity with incomplete requirements", "done": false}
+      ],
+      "sysdesign": [
+        {"id": "s1", "text": "Design AI-powered support chatbot at 13M user scale", "done": false},
+        {"id": "s2", "text": "Design request deduplication + caching layer (xAPI pattern)", "done": false},
+        {"id": "s3", "text": "Multi-agent orchestration: PSA + AQnA architecture", "done": false}
+      ],
+      "coding": [
+        {"id": "co1", "text": "LRU Cache implementation with narration", "done": false},
+        {"id": "co2", "text": "Rate limiter (token bucket + sliding window)", "done": false},
+        {"id": "co3", "text": "Debounce / throttle from scratch", "done": false}
+      ],
+      "strategy": [
+        {"id": "st1", "text": "How would you evaluate build vs buy for AI tooling?", "done": false},
+        {"id": "st2", "text": "How do you drive adoption of a new architecture across teams?", "done": false},
+        {"id": "st3", "text": "How do you measure engineering productivity at Staff level?", "done": false}
+      ]
+    },
+    "notes": [
+      {"id": "id1779738728014b71f", "text": "I have applied to Global Relay, Databricks, Stripe", "ts": "5/25/2026, 12:52:08 PM"}
+    ]
+  }
