@@ -198,7 +198,7 @@ function viewPipeline() {
   let html = `<div class="card"><div class="card-title">Add application</div>
     <div class="row" style="flex-wrap:wrap">
       <input id="pCo" placeholder="Company" style="flex:1;min-width:120px" />
-      <input id="pRo" placeholder="Role" style="flex:1;min-width:120px" />
+      <input id="pRo" placeholder="Role / Notes / Ideas" style="flex:1;min-width:120px" />
       <select id="pLv" style="width:auto"><option>Staff</option><option>Sr Staff</option><option>Principal</option><option>Senior</option><option>EM</option><option>?</option></select>
       <button class="btn" id="addAppBtn">Add</button>
     </div></div><div class="board">`;
