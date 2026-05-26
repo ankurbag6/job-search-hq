@@ -33,7 +33,7 @@ function extractJSON(raw) {
 
 /* ---------- 2. STATE + DEFAULTS ---------- */
 const TABS = ["Checklist", "Pipeline", "Projects", "Interview prep", "Notes"];
-const STAGES = ["Researching", "Applied", "Phone screen", "Onsite", "Offer"];
+const STAGES = ["Researching / Recruiters reached out", "Applied / Tech recruiter Screening", "Phone screen", "Onsite", "Offer"];
 const PREP_META = {
   behavioral: { label: "Behavioral", weight: "HIGHEST WEIGHT" },
   sysdesign:  { label: "System design", weight: "HIGH" },
@@ -146,7 +146,7 @@ function render() { renderStats(); renderTabs(); renderView(); }
 
 function renderStats() {
   const total = data.pipeline.length;
-  const active = data.pipeline.filter(a => (a.stage || a.status) && (a.stage || a.status) !== "Researching").length;
+  const active = data.pipeline.filter(a => (a.stage || a.status) && (a.stage || a.status) !== "Researching / Recruiters reached out").length;
   const offers = data.pipeline.filter(a => (a.stage || a.status) === "Offer").length;
   let items = 0, done = 0;
   data.checklist.forEach(i => { items++; if (i.done) done++; });
@@ -191,8 +191,8 @@ function toggleChecklist(i) { data.checklist[i].done = !data.checklist[i].done; 
 
 /* Pipeline */
 function normStage(a) {
-  const s = a.stage || a.status || "Researching";
-  return STAGES.includes(s) ? s : "Researching";
+  const s = a.stage || a.status || "Researching / Recruiters reached out";
+  return STAGES.includes(s) ? s : "Researching / Recruiters reached out";
 }
 function viewPipeline() {
   let html = `<div class="card"><div class="card-title">Add application</div>
@@ -220,19 +220,20 @@ function wirePipeline() {
   const add = $("addAppBtn");
   if (add) add.onclick = () => {
     const co = $("pCo").value.trim(); if (!co) return;
-    data.pipeline.push({ id: "a" + Date.now(), company: co, role: $("pRo").value.trim() || "—", level: $("pLv").value, stage: "Researching" });
+    data.pipeline.push({ id: "a" + Date.now(), company: co, role: $("pRo").value.trim() || "—", level: $("pLv").value, stage: "Researching / Recruiters reached out" });
+    updateFile();
     render();
   };
   document.querySelectorAll("[data-del]").forEach(el => el.onclick = () => { data.pipeline = data.pipeline.filter(a => a.id !== el.dataset.del); render(); });
   let dragId = null;
   document.querySelectorAll(".app").forEach(el => el.addEventListener("dragstart", () => dragId = el.dataset.id));
   document.querySelectorAll(".col").forEach(col => {
-    col.addEventListener("dragover", e => { e.preventDefault(); col.classList.add("drop-target"); });
-    col.addEventListener("dragleave", () => col.classList.remove("drop-target"));
+    col.addEventListener("dragover", e => { e.preventDefault(); col.classList.add("drop-target"); updateFile();});
+    col.addEventListener("dragleave", () => { col.classList.remove("drop-target"); updateFile();});
     col.addEventListener("drop", e => {
       e.preventDefault(); col.classList.remove("drop-target");
       const a = data.pipeline.find(x => x.id === dragId);
-      if (a) { a.stage = col.dataset.stage; delete a.status; render(); }
+      if (a) { a.stage = col.dataset.stage; delete a.status; updateFile(); render(); }
     });
   });
 }
@@ -310,9 +311,28 @@ function viewNotes() {
 function addNote() {
   const v = (noteDraft || "").trim(); if (!v) return;
   data.notes.push({ id: "id" + Date.now(), text: v, ts: new Date().toLocaleString() });
+  updateFile();
   noteDraft = ""; render();
 }
-function delNote(id) { data.notes = data.notes.filter(n => n.id !== id); render(); }
+async function updateFile(btn = null) { 
+    try {
+        const res = await fetch('/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data, null, 2)
+        });
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        if (btn) btn.textContent = "✓ Saved";
+        setTimeout(() => { if (btn) btn.textContent = "💾 Save"; }, 1500);
+      } catch (err) {
+        alert("Save failed: " + err.message);
+      }
+}
+
+function delNote(id) { data.notes = data.notes.filter(n => n.id !== id); 
+    // save the data to the file
+    updateFile();
+    render(); }
 
 /* ---------- 5. EXPORT + UTIL ---------- */
 function exportJSON() {
@@ -323,20 +343,11 @@ function exportJSON() {
 }
 function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
 
+
+
 async function saveToFile() {
   const btn = $("saveBtn");
-  try {
-    const res = await fetch('/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data, null, 2)
-    });
-    if (!res.ok) throw new Error(`Server error: ${res.status}`);
-    btn.textContent = "✓ Saved";
-    setTimeout(() => btn.textContent = "💾 Save", 1500);
-  } catch (err) {
-    alert("Save failed: " + err.message);
-  }
+  updateFile(btn);
 }
 /* ---------- 6. INIT ---------- */
 wireLoader();

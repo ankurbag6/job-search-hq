@@ -1,3 +1,9 @@
+# Personal data
+data.json
+
+# macOS
+.DS_Store
+
 # Logs
 logs
 *.log

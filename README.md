@@ -5,7 +5,7 @@ A personal job search management dashboard — lightweight, offline-first, zero 
 ## Features
 
 - **Checklist** — setup to-do list with progress bar (resume, LinkedIn, STAR stories, etc.)
-- **Pipeline** — Kanban drag-and-drop board across 5 stages: Researching → Applied → Phone screen → Onsite → Offer
+- **Pipeline** — Kanban drag-and-drop board across 5 stages: Researching / Recruiters reached out → Applied / Tech recruiter Screening → Phone screen → Onsite → Offer
 - **Projects** — project tracker with status cycling (Not Started / In Progress / Done)
 - **Interview Prep** — categorized checklist by topic and weight (Behavioral, System Design, Org/Strategy, Coding)
 - **Notes** — timestamped free-text notes (recruiter intel, comp data, interview debriefs)
@@ -71,6 +71,6 @@ The browser fetches `data.json` on load (`GET /data.json`) and POSTs back on sav
 }
 ```
 
-Pipeline stages: `Researching` | `Applied` | `Phone screen` | `Onsite` | `Offer`
+Pipeline stages: `Researching / Recruiters reached out` | `Applied / Tech recruiter Screening` | `Phone screen` | `Onsite` | `Offer`
 
 Project statuses: `Not Started` | `In Progress` | `Done`
