@@ -45,6 +45,7 @@ let data = null;
 let activeTab = "Checklist";
 let fileName = "data.json";
 let noteDraft = "";
+let editingAppId = null;
 
 const SAMPLE = {
   checklist: [
@@ -210,6 +211,7 @@ function viewPipeline() {
         <div class="co">${esc(a.company || a.co || a.name || "—")}</div>
         <div class="ro">${esc(a.role || a.ro || "")}</div>
         <div class="meta"><span class="pill staff">${esc(a.level || a.lv || "—")}</span>
+          <span class="pill edit" data-edit="${a.id}">edit</span>
         <span class="pill del" data-del="${a.id}">remove</span></div></div>`;
     });
     html += `</div>`;
@@ -220,10 +222,33 @@ function wirePipeline() {
   const add = $("addAppBtn");
   if (add) add.onclick = () => {
     const co = $("pCo").value.trim(); if (!co) return;
+    if (editingAppId) {
+      const a = data.pipeline.find(x => x.id === editingAppId);
+      if (a) {
+        a.company = co;
+        a.role = $("pRo").value.trim() || "—";
+        a.level = $("pLv").value;
+        updateFile();
+      }
+      editingAppId = null;
+      add.textContent = "Add";
+      $("pCo").value = ""; $("pRo").value = ""; $("pLv").value = "Staff";
+      render();
+      return;
+    }
     data.pipeline.push({ id: "a" + Date.now(), company: co, role: $("pRo").value.trim() || "—", level: $("pLv").value, stage: "Researching / Recruiters reached out" });
     updateFile();
     render();
   };
+  document.querySelectorAll("[data-edit]").forEach(el => el.onclick = () => {
+    const a = data.pipeline.find(x => x.id === el.dataset.edit);
+    if (!a) return;
+    $("pCo").value = a.company || a.co || a.name || "";
+    $("pRo").value = a.role || a.ro || "";
+    $("pLv").value = a.level || a.lv || "Staff";
+    editingAppId = el.dataset.edit;
+    if (add) add.textContent = "Save";
+  });
   document.querySelectorAll("[data-del]").forEach(el => el.onclick = () => { data.pipeline = data.pipeline.filter(a => a.id !== el.dataset.del); render(); });
   let dragId = null;
   document.querySelectorAll(".app").forEach(el => el.addEventListener("dragstart", () => dragId = el.dataset.id));
